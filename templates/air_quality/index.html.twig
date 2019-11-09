@@ -3,5 +3,26 @@
 {% block title %}Air Quality App{% endblock %}
 
 {% block body %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID stacji</th>
+                <th>Nazwa</th>
+                <th>Lokalizacja</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for station in stationList %}
+            <tr>
+                <td>{{ station.id }}</td>
+                <td>{{ station.stationName }}</td>
+                <td>
+                    {% if station.city %}{{ station.city.name }}{% endif %}, {{ station.addressStreet }}
+                </td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}

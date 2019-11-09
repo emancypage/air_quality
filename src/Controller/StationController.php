@@ -6,15 +6,15 @@ use App\Service\AirQualityRestApi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class AirQualityController extends AbstractController
+class StationController extends AbstractController
 {
     /**
-     * @Route("/airquality", name="air_quality")
+     * @Route("/station/{id}", name="station_detail")
      */
-    public function index(AirQualityRestApi $airQualityRestApi)
+    public function index(AirQualityRestApi $airQualityRestApi, string $id)
     {
         return $this->render('air_quality/index.html.twig', [
-            'qualityStatus' => $airQualityRestApi->getCurrentStatus('114')
+            'qualityStatus' => $airQualityRestApi->getCurrentStatus($id)
         ]);
     }
 }

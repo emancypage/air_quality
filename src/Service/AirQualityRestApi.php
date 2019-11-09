@@ -39,4 +39,22 @@ class AirQualityRestApi
     {
         return in_array($stationId, self::PERMITTED_STATION_IDS);
     }
+
+    /**
+     * @return array
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
+    public function getStationList()
+    {
+        $client = HttpClient::create();
+        $response = $client->request('GET', 'http://api.gios.gov.pl/pjp-api/rest/station/findAll');
+
+        $stationList = $response->toArray();
+
+        return $stationList;
+    }
 }
