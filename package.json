@@ -1,0 +1,25 @@
+{
+    "devDependencies": {
+        "@symfony/webpack-encore": "^0.28.0",
+        "core-js": "^3.0.0",
+        "less-loader": "^4.1.0",
+        "regenerator-runtime": "^0.13.2",
+        "webpack-notifier": "^1.6.0"
+    },
+    "license": "UNLICENSED",
+    "private": true,
+    "scripts": {
+        "dev-server": "encore dev-server",
+        "dev": "encore dev",
+        "watch": "encore dev --watch",
+        "build": "encore production --progress"
+    },
+    "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.10.2",
+        "bootstrap": "^4.3.1",
+        "jquery": "^3.4.1",
+        "less": "^3.9.0",
+        "malihu-custom-scrollbar-plugin": "^3.1.5",
+        "popper.js": "^1.15.0"
+    }
+}
