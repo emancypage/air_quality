@@ -19,32 +19,14 @@ class CommuneRepository extends ServiceEntityRepository
         parent::__construct($registry, Commune::class);
     }
 
-    // /**
-    //  * @return Commune[] Returns an array of Commune objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getOneByFields($communeName, $districtName, $provinceName): ?Commune
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('commune')
+            ->andWhere('commune.communeName = :communeName AND commune.districtName = :districtName AND commune.provinceName = :provinceName')
+            ->setParameter('communeName', $communeName)
+            ->setParameter('districtName', $districtName)
+            ->setParameter('provinceName', $provinceName)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getOneOrNullResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Commune
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

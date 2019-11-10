@@ -19,7 +19,7 @@ class AirQualityRestApi
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    public function getCurrentStatus(string $stationId) : string
+    public function getCurrentStatus(string $stationId): string
     {
         $client = HttpClient::create();
         $response = $client->request('GET', 'http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/'.$stationId);
@@ -37,13 +37,31 @@ class AirQualityRestApi
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    public function getStationList()
+    public function getStationList(): array
     {
         $client = HttpClient::create();
         $response = $client->request('GET', 'http://api.gios.gov.pl/pjp-api/rest/station/findAll');
 
         $stationList = $response->toArray();
+        $stationList = $this->convertNullableValues($stationList);
 
         return $stationList;
+    }
+
+    private function convertNullableValues(array $arrayToProcess, $depth = 1): array
+    {
+        foreach ($arrayToProcess as $key => $value) {
+            if (is_null($value)) {
+                $arrayToProcess[$key] = '';
+            }
+
+            if (is_array($value)) {
+                $value = $this->convertNullableValues($value);
+
+                $arrayToProcess[$key] = $value;
+            }
+        }
+
+        return $arrayToProcess;
     }
 }
