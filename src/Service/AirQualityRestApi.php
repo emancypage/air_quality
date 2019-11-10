@@ -48,7 +48,11 @@ class AirQualityRestApi
         return $stationList;
     }
 
-    private function convertNullableValues(array $arrayToProcess, $depth = 1): array
+    /**
+     * @param array $arrayToProcess
+     * @return array
+     */
+    private function convertNullableValues(array $arrayToProcess): array
     {
         foreach ($arrayToProcess as $key => $value) {
             if (is_null($value)) {

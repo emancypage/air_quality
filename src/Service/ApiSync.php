@@ -30,6 +30,10 @@ class ApiSync
      * @var CityRepository
      */
     private $cityRepository;
+    /**
+     * @var \App\Repository\StationRepository|\Doctrine\Common\Persistence\ObjectRepository
+     */
+    private $stationRepository;
 
     public function __construct(
         AirQualityRestApi $airQualityRestApi,
@@ -40,9 +44,10 @@ class ApiSync
         $this->entityManager = $entityManager;
         $this->communeRepository = $entityManager->getRepository(Commune::class);
         $this->cityRepository = $entityManager->getRepository(City::class);
+        $this->stationRepository = $entityManager->getRepository(Station::class);
     }
 
-    public function sync()
+    public function syncStationList()
     {
         $stationList = $this->airQualityRestApi->getStationList();
 
@@ -52,10 +57,14 @@ class ApiSync
                 continue;
             }
 
+            $apiStationId = $stationData['id'];
+            $cityId = $stationData['city']['id'];
             $communeName = $stationData['city']['commune']['communeName'];
             $districtName = $stationData['city']['commune']['districtName'];
             $provinceName = $stationData['city']['commune']['provinceName'];
 
+            $city = $this->cityRepository->findOneByApiCityId($cityId);
+            $station = $this->stationRepository->findOneByApiStationId($apiStationId);
             $commune = $this->communeRepository->getOneByFields($communeName, $districtName, $provinceName);
 
             if (!$commune) {
@@ -65,24 +74,28 @@ class ApiSync
                     ->setProvinceName($provinceName);
             }
 
-            $city = new City();
-            $city->setApiCityId($stationData['city']['id'])
-                ->setName($stationData['city']['name'])
-                ->setCommune($commune);
+            if (!$city) {
+                $city = new City();
+                $city->setApiCityId($cityId)
+                    ->setName($stationData['city']['name'])
+                    ->setCommune($commune);
+            }
 
-            $station = new Station();
-            $station->setApiStationId($stationData['id'])
-                ->setStationName($stationData['stationName'])
-                ->setGegrLat($stationData['gegrLat'])
-                ->setGegrLon($stationData['gegrLon'])
-                ->setCity($city)
-                ->setAddressStreet($stationData['addressStreet']);
+            if (!$station) {
+                $station = new Station();
+                $station->setApiStationId($apiStationId)
+                    ->setStationName($stationData['stationName'])
+                    ->setGegrLat($stationData['gegrLat'])
+                    ->setGegrLon($stationData['gegrLon'])
+                    ->setCity($city)
+                    ->setAddressStreet($stationData['addressStreet']);
 
-            $this->entityManager->persist($commune);
-            $this->entityManager->persist($city);
-            $this->entityManager->persist($station);
+                $this->entityManager->persist($commune);
+                $this->entityManager->persist($city);
+                $this->entityManager->persist($station);
 
-            $this->entityManager->flush();
+                $this->entityManager->flush();
+            }
         }
     }
 }

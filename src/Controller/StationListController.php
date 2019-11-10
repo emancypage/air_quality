@@ -16,7 +16,7 @@ class StationListController extends AbstractController
      */
     public function index(AirQualityRestApi $airQualityRestApi, ApiSync $apiSync)
     {
-        $apiSync->sync();
+        $apiSync->syncStationList();
 
         return $this->render('air_quality/index.html.twig', [
             'stationList' => $airQualityRestApi->getStationList()
