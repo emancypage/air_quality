@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Station;
+use App\Repository\StationRepository;
 use App\Service\AirQualityRestApi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -9,12 +11,18 @@ use Symfony\Component\Routing\Annotation\Route;
 class StationController extends AbstractController
 {
     /**
-     * @Route("/station/{id}", name="station_detail")
+     * @Route("/station/{stationId}", name="station_detail")
      */
-    public function index(AirQualityRestApi $airQualityRestApi, string $id)
+    public function index(
+        AirQualityRestApi $airQualityRestApi,
+        StationRepository $stationRepository,
+        string $stationId
+    )
     {
-        return $this->render('air_quality/index.html.twig', [
-            'qualityStatus' => $airQualityRestApi->getCurrentStatus($id)
+        $station = $stationRepository->findOneByApiStationId($stationId);
+
+        return $this->render('air_quality/station_detail.html.twig', [
+            'station' => $station
         ]);
     }
 }

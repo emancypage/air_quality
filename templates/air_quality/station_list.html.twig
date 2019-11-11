@@ -4,6 +4,8 @@
 
 {% block body %}
     <table class="table">
+        Synchro listy stacji:
+        {{ form(form) }}
         <thead>
             <tr>
                 <th>ID stacji</th>
@@ -15,11 +17,12 @@
         {% for station in stationList %}
             <tr>
                 <td>{{ station.id }}</td>
-                <td>{{ station.stationName }}</td>
+                <td>
+                    <a href="{{ path('station_detail', {stationId:station.id}) }}">{{ station.stationName }}</a>
+                </td>
                 <td>
                     {% if station.city %}{{ station.city.name }}{% endif %}, {{ station.addressStreet }}
                 </td>
-
             </tr>
         {% endfor %}
         </tbody>
