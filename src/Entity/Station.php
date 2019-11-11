@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,6 +48,16 @@ class Station
      * @ORM\Column(type="string", length=255)
      */
     private $addressStreet;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\StationData", mappedBy="StationId", orphanRemoval=true)
+     */
+    private $stationData;
+
+    public function __construct()
+    {
+        $this->stationData = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +132,37 @@ class Station
     public function setAddressStreet(string $addressStreet): self
     {
         $this->addressStreet = $addressStreet;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StationData[]
+     */
+    public function getStationData(): Collection
+    {
+        return $this->stationData;
+    }
+
+    public function addStationData(StationData $stationData): self
+    {
+        if (!$this->stationData->contains($stationData)) {
+            $this->stationData[] = $stationData;
+            $stationData->setStationId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStationData(StationData $stationData): self
+    {
+        if ($this->stationData->contains($stationData)) {
+            $this->stationData->removeElement($stationData);
+            // set the owning side to null (unless already changed)
+            if ($stationData->getStationId() === $this) {
+                $stationData->setStationId(null);
+            }
+        }
 
         return $this;
     }
