@@ -12,21 +12,21 @@ class AirQualityRestApi
 
     /**
      * @param string $stationId
-     * @return string
+     * @return array
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    public function getCurrentStatus(string $stationId): string
+    public function getStationIndex(string $stationId): array
     {
         $client = HttpClient::create();
         $response = $client->request('GET', 'http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/'.$stationId);
 
-        $stationData = $response->toArray();
+        $stationIndex = $response->toArray();
 
-        return $stationData['stIndexLevel']['indexLevelName'];
+        return $stationIndex;
     }
 
     /**

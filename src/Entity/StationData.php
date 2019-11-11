@@ -23,7 +23,7 @@ class StationData
     private $StationId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
     private $plAqIndexLvl;
 
@@ -49,12 +49,12 @@ class StationData
         return $this;
     }
 
-    public function getPlAqIndexLvl(): ?int
+    public function getPlAqIndexLvl(): ?string
     {
         return $this->plAqIndexLvl;
     }
 
-    public function setPlAqIndexLvl(int $plAqIndexLvl): self
+    public function setPlAqIndexLvl(string $plAqIndexLvl): self
     {
         $this->plAqIndexLvl = $plAqIndexLvl;
 

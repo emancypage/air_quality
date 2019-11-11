@@ -8,6 +8,7 @@ namespace App\Service;
 use App\Entity\City;
 use App\Entity\Commune;
 use App\Entity\Station;
+use App\Entity\StationData;
 use App\Repository\CityRepository;
 use App\Repository\CommuneRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -47,7 +48,18 @@ class ApiSync
         $this->stationRepository = $entityManager->getRepository(Station::class);
     }
 
-    public function syncStationList()
+    public function syncStationData(int $stationId): void
+    {
+        $stationData = $this->airQualityRestApi->getStationIndex($stationId);
+        $station = $this->stationRepository->findOneByApiStationId($stationId);
+
+        $stationData = new StationData();
+        $stationData->setStationId($station);
+        $stationData->setPlAqIndexLvl($stationData['stIndexLevel']['indexLevelName']);
+        $stationData->setTimestamp(new \DateTime());
+    }
+
+    public function syncStationList(): void
     {
         $stationList = $this->airQualityRestApi->getStationList();
 
