@@ -27,6 +27,11 @@ class StationData
      */
     private $plAqIndexLvl;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $timestamp;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +57,18 @@ class StationData
     public function setPlAqIndexLvl(int $plAqIndexLvl): self
     {
         $this->plAqIndexLvl = $plAqIndexLvl;
+
+        return $this;
+    }
+
+    public function getTimestamp(): ?\DateTimeInterface
+    {
+        return $this->timestamp;
+    }
+
+    public function setTimestamp(\DateTimeInterface $timestamp): self
+    {
+        $this->timestamp = $timestamp;
 
         return $this;
     }
